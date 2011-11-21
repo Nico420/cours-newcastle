@@ -1,0 +1,69 @@
+\documentclass[a4paper,12pt]{article} %indique la classe du document, et les options
+
+\pagenumbering{roman}
+%le pr\'eambule
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{multicol}
+\selectlanguage{english}
+
+
+%Titre
+\makeatletter
+\def\maketitle{
+
+	\begin{multicols}{2}
+		{\@author\\\texttt{\@email}}
+		\begin{flushright}
+			{\includegraphics[width=0.5\linewidth]{../../Newcastle-University.jpg}}\\
+			{\@date}\\
+		\end{flushright}
+	\end{multicols}
+	\vspace{1cm}
+	\begin{center}
+		{\LARGE \@title}
+		\rule{10cm}{1pt}
+	\end{center}
+	\vspace{1cm}
+}
+\def\email#1{\def\@email{#1}}
+\makeatother
+\email{nicolas.desfeux@gmail.com}
+\date{\today}
+\author{Nicolas Desfeux}
+\title{
+\Huge{Designing a Graphical User Interface for the Bracelet Computer
+}}
+
+
+%document principal 
+
+\begin{document}
+\maketitle
+
+\pagenumbering{arabic}
+
+\section*{Introduction}
+The purpose of this document is to explain the design choices and the working way of the bracelet computer. It will show the benefits and the drawbacks of choices, compare to other solutions.
+
+\section{Operation}
+\subsection{Available actions}
+\begin{itemize}
+\item \textbf{Left and Right Arrows} :  Those actions allows to navigate between the different items of the computer (define a new place, going home, going to a particular place,...). 
+\item \textbf{Up and Down arrows}
+\item \textbf{Short push}
+\item \textbf{Long push} A long is equivalent to holding the button for 3 seconds or more.
+\end{itemize}
+The idea of having a long push allows one more action. The time might be discussed, and can maybe be part of settings, and be changeable. Anyway, the idea is to keep a permanent and easy access to the way home. Anywhere you are in the computer, a long push will bring back to the screen that give you the way home.\\
+You have to think at the computer like as a tube, with items on it. To switch from one item to another, you just have to use the left and right arrows. Up and down arrows helps you navigates in the item. Push button is use for selection and validation.
+\section{About functionalities}
+\subsection{Current Location}
+\subsection{Going Home}
+\section{Going to a predefined place}
+\subsection{Registered a new place}
+\subsection{Maximum Distance}
+\section*{Conclusion}
+This design is provided for elderly people, with dementia. The operation of the computer have been choose to be very simple, and based on Nielsen's principles (especially on graphics parts). 
+
+\end{document}
