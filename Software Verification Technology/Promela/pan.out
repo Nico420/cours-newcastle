@@ -1,0 +1,9 @@
+verification result:
+spin -a  Pablo-a.pml
+gcc -DMEMLIM=1024 -O2 -DXUSAFE -DSAFETY -DNOCLAIM -w -o pan pan.c
+spin -a  Pablo-a.pml
+gcc -DMEMLIM=1024 -O2 -DXUSAFE -DNP -DNOCLAIM -w -o pan pan.c
+spin -a  Pablo-a.pml
+gcc -DMEMLIM=1024 -O2 -DXUSAFE -DNP -DNOCLAIM -w -o pan pan.c
+
+
