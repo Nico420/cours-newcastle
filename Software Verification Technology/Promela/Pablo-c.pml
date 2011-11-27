@@ -25,16 +25,34 @@ proctype chief(){
 }
 
 proctype customer(){
+	
 	//Local variables for reading the service_channel.
 	mtype plat;
 	int id_in_queue;
+	int order_starter = 0;
+	int order_main = 0;
+	int order_desert = 0;
+	int order_drink = 0;
+	
+	//Check what the customer picks
+	chan order_pick = [4] of  {mtype};
+	
+	int number_of_order=0;
 
+	
 	//Indicate if the customer already placed an order.
 	bool wait_order = false;
 
+	
 	printf("\nI'm the customer %d\n\n",_pid);
 
 	label1:
+		//Verification for the number of order
+		assert(number_of_order<5);
+		assert(order_starter<2);
+		assert(order_main<2);
+		assert(order_desert<2);
+		assert(order_drink<2);
 		//launch a loop for the customer
 	do	
 		::wait_order -> goto pick_order;
@@ -49,6 +67,7 @@ proctype customer(){
 		:: id_in_queue==_pid -> 
 			printf("\nCustomer %d picked meal '%e' (associated id : %d)\n",_pid,plat,id_in_queue);
 			wait_order=false;
+			order_pick!plat;
 			goto label1;
 		::else -> service_channel!plat,id_in_queue;
 		fi;
@@ -57,13 +76,22 @@ proctype customer(){
 	makeOrder_or_leave:
 	printf("\nI will maybe make an order or leave\n");
 	do
-	:: order_make!starter,_pid;goto makeOrder;
-	:: order_make!main,_pid;goto makeOrder;
-	::order_make!desert,_pid;goto makeOrder;
-	::order_make!drink,_pid;goto makeOrder;
+	:: (order_starter==0) && number_of_order<4 -> order_starter++;plat=starter;goto makeOrder;
+	:: (order_main==0) && number_of_order<4 -> order_main++;plat=main;goto makeOrder;
+	:: (order_desert==0) && number_of_order<4 -> order_desert++;plat=desert;goto makeOrder;
+	:: (order_drink==0) && number_of_order<4 -> order_drink++;plat=drink;goto makeOrder;
 	::!wait_order -> goto leave;
 	od;
 	makeOrder:
+	think:
+	do
+		::goto think;
+		::goto makeOrder_or_leave;
+		::break;
+	od;
+	order_make!plat,_pid;
+	
+	number_of_order++;
 	wait_order=true;
 	goto label1;
 	
@@ -74,7 +102,7 @@ printf("leaving, customer %d\n",_pid);
 }
 
 init {
-int nb_customer=2;
+int nb_customer=6;
 run chief();	
 do	
 :: (nb_customer>0) -> run customer();nb_customer--;

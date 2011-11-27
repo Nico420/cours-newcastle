@@ -17,7 +17,7 @@ set Unix 1;                           # updated below
 
 ### Tools
 	set SPIN    spin   ;# essential
-	set CC      gcc    ;# essential
+	set CC c:/cygwin/bin/gcc    ;# essential
 	set DOT     dot    ;# recommended, for automata view
 	set SWARM   swarm  ;# optional, for swarm verification panel
 	set CURL    curl   ;# optional, for version check information
