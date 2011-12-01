@@ -1,0 +1,165 @@
+Distribution Update History of the SPIN sources
+===============================================
+
+==== Version 6.0 - 5 December 2010 ====
+
+The update history since 1989:
+
+ Version 0: Jan. 1989 - Jan. 1990  5.6K lines: original book version
+ Version 1: Jan. 1990 - Jan. 1995  7.9K lines: first version on netlib
+ Version 2: Jan. 1995 - Aug. 1997  6.1K lines: partial-order reduction
+ Version 3: Aug. 1997 - Jan. 2003 17.9K lines: bdd-like compression (MA)
+ Version 4: Jan. 2003 - Oct. 2007 28.2K lines: embedded c-code, bfs
+ Version 5: Oct. 2007 - Dec. 2010 32.8K lines: multi-core & swarm support
+ Version 6: Dec. 2010 -           36.8K lines: inline ltl formula etc.
+
+==== Version 6.0.0 - 5 December 2010 ====
+
+the main improvements in Spin version 6 are:
+
+- support for inline specification of LTL properties:
+        Instead of specifying a never claim, you can now
+        specify LTL formulae directly inside a verification model.
+        Any number of named LTL formulae can be listed and named.
+        The formulae are converted by Spin into never claims in the background,
+        and you can choose which property should be checked for any run
+        using a new pan runtime parameter pan -N name.
+        Example:
+                    ltl p1 { []<>p  }
+                    ltl p2 { <> (a > b) implies len(q) == 0 }
+
+        There are a few additional points to note:
+        -  Inline LTL properties state *positive* properties to prove, i.e.,
+           they do not need to be negated to find counter-examples.
+           (Spin performs the negation automatically in the conversions.)
+        -  You can use any valid Promela syntax to specify the predicates
+	   (state properties). See, for instance, the use of expressions (a>b)
+	   and (len(q) == 0) in the examples above.
+           So it is no longer needed to introduce macros for propositional symbols.
+        -  White space is irrelevant -- you can insert newlines anywhere in an LTL block
+	   (i.e., in the part of the LTL formula between the curly braces).
+        -  You can use textual alternatives to all temporal and some propositional operators.
+           This includes the terms always, eventually, until, weakuntil,
+           stronguntil, implies, equivalent, and release (the V operator),
+	   which are now keywords. So the first formula (p1) above could also be
+	   written as:
+                         ltl p1 {
+                                 always
+                                        eventually p /* maybe some comment here */
+                         }
+
+- Improved scope rules:
+        So far, there were only two levels of scope for variable
+        declarations: global or proctype local.
+        Version 6 adopts more traditional block scoping rules:
+        for instance, a variable declared inside an inline definition or inside
+        an atomic or non-atomic block now has scope that is limited to that inline or block.
+        You can revert to the old scope rules by using spin -O (the capital letter Oh)
+
+- New language constructs:
+	There are two new language constructs, that can simplify the specification
+	of common constructs: 'for' and 'select'. Both are implemented as meta-
+	terms, which means that they are translated by the parser into existing
+	language constructs (using 'do' or 'if').
+
+	The new 'for' construct has three different uses:
+		for (i : 1 .. 9) {
+			printf("i=%d\n", i)
+		}
+	simply prints the values from 1 through 9, meaning that the body of the
+	for is repeated once for each value in the range specified.
+		int a[10];
+		for (i in a) {
+			printf("a[%d] = %d\n", i, a[i])
+		}
+	is a way to repeat an fragment of code once for each element in an array.
+	In the example above, the printf will be executed once for each value from
+	0 through 9 (note that this is different from the first example).
+	This works for any array, independent of its type.
+	The last use of the for is on channels.
+		typedef utype { bin b; byte c; };
+		chan c = [10] of { utype };
+		utype x;
+		for (x in c) {
+			printf("b=%d c=%d\n", x.b, x.c)
+		}
+	which retrieves each message in the channel and makes it available for the
+	enclosed code. In this case, the channel (c above) must have been
+	declared with a single parameter, the type of which must match the variable
+	type specified in the for statement (the name before the 'in' keyword).
+	[Note that with the introduction of the new keyword 'in' some early
+	Spin models may now have syntax errors, if 'in' is used as a variable name.)
+
+	The second new language statement is 'select' and its use is illustrated
+	by this example:
+		int i;
+		select (i : 1..10);
+		printf("%d\n", i);
+	Select non-deterministically picks a value for i out of the range that
+	is provided.
+
+- Multiple never claims:
+        Other than multiple and named inline LTL properties, you can also include
+        multiple explicit (and named) never claims in a model. The name goes after
+        the keyword 'never' and before the curly brace.
+        As with inline LTL properties, the model checker will still only use one never
+        claim to perform a verification run, but you can choose on the
+        command line of pan which claim you want to use: pan -N name
+
+- Synchronous product of claims:
+        If multiple never claims are defined, you can use spin to
+        generate a single claim which encodes the synchronous product
+        of all never claims defined, using the new option: spin -e spec.pml
+	(this should rarely be needed).
+
+- Dot support:
+        A new option for the executable pan supports the generation of
+        the state tables in the format accepted by the dot tool from
+        graphviz: pan -D
+	The older ascii format remains available as pan -d.
+
+- Standardized output:
+        All filename / linenumber references are now in a new single standard
+        format, given as filename:linenumber, which allows postprocessing
+        tools to easily hotlink such references to the source.
+        This feature is exploited by the new replacement for xspin, called ispin
+        that will also be distributed soon.
+
+Smaller changes:
+
+- bugfix for line numbers being reported incorrectly in reachability reports
+- all filename linenumber references unified as filename:linenr
+
+==== Version 6.0.1 - 16 December 2010 ====
+
+- fixed a bug in the implementation of the new 'for' and 'select' statements
+  where the end of the range could be one larger than intended.
+- extend the implementation of the new for and select meta-statements
+  to allow expressions for the start and end value of the ranges
+- when executing on Windowns without cygwin, better treatment of filenames
+  with backslashes, avoiding that the backslash is interpreted as an
+  escape in the pan.h source
+- fix small problem in generation of pan.h, avoiding the string intialization
+  ""-"" (when what is intended is "-"). remarkably, the C compiler does not
+  complain about the first version and merrily subtracts the two addresses
+  of the constant string "" and returns a 0...
+- prevented the ltl conversion algorithm to run in verbose mode when spin -a
+  is run with a -v flag (this produced a large amount of uninteresting output)
+- also a couple of updates to the new iSpin GUI -- so that it works better
+  on smaller screens, and also displays the automata view better (by adding
+  option -o3 in the pan.c generation, so that all transitions are visible
+  in the automata displayed.)
+
+
+==== Version 6.1.0 - 4 May 2011 ====
+
+- removed calls to tmpfile(), which seems to fail on some Windows 7 systems
+- made it an error to have an 'else' statement combined with an i/o statement
+  when xs or xr assertions are used to strengthen the partial order reduction.
+  the 'else' would be equivalent to an 'empty()' call, which violates the
+  xr/xs rules and could make the partial order reduction unsound
+- avoid misinterpretation of U V an X characters when part of variable names
+  used in the new style of inline specification of ltl formula
+- improved treatment of remote references, under the new scope rules
+- some support for an experimental new version of bfs, not yet enabled
+- general code cleanup
