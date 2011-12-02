@@ -1,6 +1,5 @@
 \documentclass[a4paper,11pt]{article} %indique la classe du document, et les options
 
-\pagenumbering{roman}
 %le pr\'eambule
 \usepackage[english]{babel}
 \usepackage{graphicx}
@@ -65,7 +64,7 @@ breakatwhitespace=false,        % sets if automatic breaks should only happen at
 \section{Simple promela design}
 \subsection{Protocol implementation}
 Implementing this protocol requires some global variables. 
-We used a mtype to define the different meal available : 
+We used a mtype to define the different measl available : 
 \begin{lstlisting}
 mtype = {starter,main,desert,drink}
 \end{lstlisting}
@@ -79,28 +78,109 @@ Both channels take value of type \{mtype, int\}, in order to couple a customer a
 \paragraph{Customer proctype} The customer proctype is a bit more complicate. The customer can go throw different states. The proctype we design consist on a series of switch which leads to different actions. As for the chief, the customer have a loop, as he can order several meal, or leave.
 The first switch we used check if the client already make an order.
 \begin{itemize}
-\item if the client already make an order: 
-\item if the client haven't order yet : 
+\item if the client haven't order yet : Thanks to labels and goto, we jump to another do-loop, which will allow a choose between the different meal or leave.The choice will be done arbitrarily. A choice to leave will kill the protype, an order will send you back to the main do-loop, after sending the order to the order\_make channel.
+\item if the client already make an order : The proctype goes on a state where he is waiting for his order. to do that, we used a loop that check the service\_channel : 
+\begin{lstlisting}
+pick_order:
+//We check the service channel until we find the good id.
+do
+::service_channel?plat,id_in_queue;
+	if
+	:: id_in_queue==_pid -> 
+		printf("\nCustomer %d picked meal '%e' (associated id : %d)\n",_pid,plat,id_in_queue);
+		wait_order=false;
+		goto main;
+	::else -> service_channel!plat,id_in_queue;
+	fi;
+od; 
+\end{lstlisting}
+The principle is as follow : the customer check the first meal he found in the channel, look at the id. If it's his ID on the meal, he keep it and go back to the main loop. If it's not his ID on the meal, he put it back in the channel, and look at the next one. This is a waiting loop, the customer can't leave without his meal.
 \end{itemize} 
 \paragraph{Runing the model}
-To run the model, we created an init proctype, who launch one chief proctyp, and as many customer proctyp as we need. You can change the number of customer created by changing the variable nb\_customer. There is no stop condition.
+To run the model, we created an init proctype, who launch one chief proctyp, and as many customer proctyp as we need. You can change the number of customer created by changing the variable nb\_customer. There is no stop condition. We are waiting for every customer to leave.
 \subsection{Check for deadlock, and model checking}
 We added a end label at the loop in the chief proctyp. That allow the chief not ending at the end of the execution. By this way, we avoid something seen as a mistake by Spin, but which is not in the real life (The chief only stop waiting at the close of the restaurant, that's include a time handling that we didn't implement here). At the end of the execution, each customers have to reach their end (we can't close the restaurant if some customers are still inside !).\\
-To check the model, we run some simulations using the Simulate / Replay function of ispin (with random and interactive progress).\\
-Runing verification confirm that the model we design have no dead lock. We run the safety verification, focusing on invalide endstates (deadlocks). You can the result of this verification in the appendix (figure \ref{verifA} page \pageref{verifA}).
+To check the model, we run some simulations using the Simulate / Replay function of ispin (with random and interactive progress). We are checking the correctness of the model we design by priting informations. We also do a "visual" check : are every process stop normally at the end of execution ? You can find in appendix (figure \ref{randomA} page \pageref{randomA}).\\
+Running verification confirm that the model we design have no dead lock. We run the safety verification, focusing on invalid end-states (deadlocks). You can the result of this verification in the appendix (figure \ref{verifA} page \pageref{verifA}).
 \newpage
 \section{Adding properties}
+We decided to introduce new variables and new conditions to satisfy those properties.
 \subsection{Maximum order and choices constraint}
+\paragraph{Number maximum of order}
+We added a new local variable for each customer proctype. We increment this variable each time the customer place an order. We had a control on that variable before the customer try to make on order, checking if it's lower that the maximal number of order.
+\paragraph{Choice constraint}
+We added four integer for each customer process. Those integers count the number of each meal you order. Then we check those variables before the customer place an order.
+\paragraph{}We also introduce in this model a new channel, that save the list of what a customer ordered. This is simple channel of mtype that we fill each time the customer pick it order. It's usefull for checking that every customer take only one instance of each meal.
 \subsection{Assertion}
-\newpage
-\section{Additional possibility}
-\subsection{Thinking state}
-\subsection{Checking for deadlock}
+We used assertion to verify this correctness requirement.
+Here are the assertion we used : 
+\begin{lstlisting}
+//Verification for the number of order
+assert(number_of_order<5 
+	&& order_starter<2 
+	&& order_main<2
+	&& order_desert<2
+	&& order_drink<2);
+\end{lstlisting}
+We placed this assertion at the beginning of the main loop of customer proctype. That mean that this assertion is verified : 
+\begin{itemize}
+\item After each order from the customer;
+\item After each meal pick by the customer.
+\end{itemize}
+We also add some check on those variables, that should make the model respect the requirements : 
+\begin{lstlisting}
+do
+:: (order_starter==0) && number_of_order<4 -> order_starter++;order_make!starter,_pid;goto makeOrder;
+:: (order_main==0) && number_of_order<4 -> order_main++;order_make!main,_pid;goto makeOrder;
+:: (order_desert==0) && number_of_order<4 -> order_desert++;order_make!desert,_pid;goto makeOrder;
+:: (order_drink==0) && number_of_order<4 -> order_drink++;order_make!drink,_pid;goto makeOrder;
+::!wait_order -> goto leave;
+od;
+\end{lstlisting}
+We simply check those variable before make an order, and update them if an order is about to be done.
+We run a verification using Spin, focusing on assertion violations, and the result come back positive. The result of this verification can be find on the appendix (figure \ref{verifB} page \pageref{verifB}). To be sure of the assertions we make, we also make some test on slightly different models : 
+\begin{itemize}
+\item Changing the assertion : We modify the values in the assertions, and watch the reaction of the system. In our case, the controls we set up seems effecient as value changes in the assertions leads to an assertion violation (if you reduce the value in the assertion, increasing them is meaningless)
+\item Changing variables control : We change values in the do loop (allow more order, or several times the same meal), and watch the reaction of the system. In our case, those modifications leads to an assertion violation.
+\end{itemize}
 
 \newpage
+\section{Additional possibility}
+\subsection{Thinking state} In our model, the add of a thinking state can be see as a new choice for the customer. After he choices a meal, we just have to had a new loop : 
+\begin{lstlisting}
+makeOrder:
+think:
+do
+	::goto think;
+	::goto makeOrder_or_leave;
+	::break;
+od;
+order_make!plat,_pid;
+\end{lstlisting}
+makeOrder is the label reached when the customer choose a meal to order. Here we offer three choices : stay in the think loop, change your mind, or keep your choice. No changes are needed on the channels, as the order is make only if the customer leave the think loop.
+\subsection{Checking for deadlock}
+We check that model against deadlock, and no one was found. The result of the checking can be seen in the appendix (figure \ref{verifC} page\pageref{verifC}). Simulations on this model also lead to a good respect of the new property.
+\newpage
 \appendix
+\tableofcontents
+\listoffigures
 \begin{figure}
 \caption{Verification on simple model implementation\label{verifA}}
-\end{figure}
 \lstinputlisting{Promela/Pablo-a.out}
+\end{figure}
+\begin{figure}
+\caption{Sample of random simulation on simple model implementation\label{randomA}}
+\lstinputlisting{Promela/Promela-a.txt}
+\end{figure}
+\begin{figure}
+\caption{Verification with constraint choices and limited order\label{verifB}}
+\lstinputlisting{Promela/Pablo-b.out}
+\end{figure}
+\begin{figure}
+\caption{Verification for model we think state\label{verifC}}
+\lstinputlisting{Promela/Pablo-c.out}
+\end{figure}
+
+
+
 \end{document}

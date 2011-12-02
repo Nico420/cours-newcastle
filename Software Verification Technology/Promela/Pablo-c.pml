@@ -46,13 +46,13 @@ proctype customer(){
 	
 	printf("\nI'm the customer %d\n\n",_pid);
 
-	label1:
+	main:
 		//Verification for the number of order
-		assert(number_of_order<5);
-		assert(order_starter<2);
-		assert(order_main<2);
-		assert(order_desert<2);
-		assert(order_drink<2);
+		assert(number_of_order<5 
+			&& order_starter<2 
+			&& order_main<2
+			&& order_desert<2
+			&& order_drink<2);
 		//launch a loop for the customer
 	do	
 		::wait_order -> goto pick_order;
@@ -68,7 +68,7 @@ proctype customer(){
 			printf("\nCustomer %d picked meal '%e' (associated id : %d)\n",_pid,plat,id_in_queue);
 			wait_order=false;
 			order_pick!plat;
-			goto label1;
+			goto main;
 		::else -> service_channel!plat,id_in_queue;
 		fi;
 	od;
@@ -93,7 +93,7 @@ proctype customer(){
 	
 	number_of_order++;
 	wait_order=true;
-	goto label1;
+	goto main;
 	
 
 	leave:

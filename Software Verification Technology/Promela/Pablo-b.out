@@ -1,0 +1,42 @@
+verification result:
+spin -a  Pablo-b.pml
+gcc-4 -DMEMLIM=1024 -O2 -DXUSAFE -DSAFETY -DNOCLAIM -w -o pan pan.c
+./pan -m10000 
+Pid: 4592
+Depth=    3391 States=    1e+06 Transitions= 1.69e+06 Memory=   462.890	t=     2.46 R=   4e+05
+Depth=    3391 States=    2e+06 Transitions= 3.36e+06 Memory=   922.656	t=     6.19 R=   3e+05
+pan: resizing hashtable to -w21..  done
+pan: reached -DMEMLIM bound
+	1.07366e+09 bytes used
+	102400 bytes more needed
+	1.07374e+09 bytes limit
+hint: to reduce memory, recompile with
+  -DCOLLAPSE # good, fast compression, or
+  -DMA=590   # better/slower compression, or
+  -DHC # hash-compaction, approximation
+  -DBITSTATE # supertrace, approximation
+
+(Spin Version 6.1.0 -- 4 May 2011)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	- (not selected)
+	assertion violations	+
+	cycle checks       	- (disabled by -DSAFETY)
+	invalid end states	+
+
+State-vector 590 byte, depth reached 3391, errors: 0
+  2202866 states, stored
+  1534198 states, matched
+  3737064 transitions (= stored+matched)
+        0 atomic steps
+hash conflicts:   2923642 (resolved)
+
+ 1023.918	memory usage (Mbyte)
+
+
+pan: elapsed time 7.38 seconds
+No errors found -- did you verify all claims?
+
+
