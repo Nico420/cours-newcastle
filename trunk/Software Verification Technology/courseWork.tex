@@ -5,6 +5,7 @@
 \usepackage[english]{babel}
 \usepackage{graphicx}
 \usepackage{array}
+\usepackage{picins}
 \selectlanguage{english}
 
 
@@ -77,29 +78,53 @@ Coursework 2011
 \begin{document}
 \maketitle
 \newpage
+
 \tableofcontents
+\addcontentsline{toc}{section}{Introduction}
 \newpage
 \pagenumbering{arabic}
 
-\section{Introduction}
-Nowadays, the need for confidence is higher than ever. That's why people need to provide proof of the exactitude of the product or service they want to provide. 
+\section*{Introduction}
+Nowadays, the need for confidence is higher than ever. That's why people need to provide proof of the exactitude of the product or service they want to provide. Whether we speak of hardware or software, verification goals is to assure that it satisfies all the specifications expected. This discipline, in constant evolution is a good way to provide insurance that a product do it was design for.\\
+The purpose of this document is to present you an application of model checking in a real world company. We decided to focus on an IBM\footnote{International Business Machines} device : the IBM Gigahertz Processor. We'll start by shortly introduce IBM and the gigahertz processor, then we'll spend more time on why and how verification was used by IBM on this processor. 
 
 \section{IBM Gigahertz Processor}
 \subsection{IBM}
-International Business Machines, also known as IBM \cite{IBM}\cite{Wikipaedia}, is a major society in computers. They develop hardware and software solutions for professional and single users.They also provide services in a lot of subjects related to computers (like services in security and confidentiality).
-\includegraphics[width=0.2\linewidth]{logo_IBM.png}
+\paragraph{}International Business Machines, also known as IBM \cite{IBM}\cite{Wikipaedia}, is a major company in computers. They develop hardware and software solutions for professional and private users.They also provide services in a lot of subjects related to computers (like services in security and confidentiality).
+IBM is a well known supplier for hardware companies as Intel for example. \\
+\parpic{\includegraphics[width=0.2\linewidth]{logo_IBM.png}}
+\paragraph{}Recently, they achieved to create processor that can reach a frequency close  to half of a terahertz.
+IBM Material, subdivision of IBM dedicated to materials, handle with hardware on a entire life cycle. It goes from the development to recycling, including integration and on site installation.  It's in that division that are design and develop IBM's processor.\\
+IBM also have a subdivision called IBM research\cite[IBMa] , which develop and implement most of the verification tools and method use by IBM.
 \subsection{Processor}
-\includegraphics[width=0.2\linewidth]{processor_IBM.jpg}
-
-\section{Verification on IBM gigahertz processor}
-\subsection{Problem specifications - Method use}
+IBM develop processors for there own use, and for other hardware suppliers. They try to develop solutions for different usage, and for different company. IBM is also an active actor in the race that exists between manufacturers for processor's speed. They have a big activity on research and improvements.
+\parpic{\includegraphics[width=0.2\linewidth]{processor_IBM.jpg}}
+You can find IBM processors in most of IBM's solutions (in the IBM POWER\cite{IBMb} for example ). IBM provides processor for different brands, as Microsoft : the processor contained in the Xbox 360 is an IBM processor\cite{Wikipaedia}. \\
+The Gigahertz processor
+\\\\
+\section{Model checking of IBM gigahertz processor}
+IBM have dedicated research laboratory working on verification. For example, IBM Haifa Research Laboratory works a lot on Formal Verification and Testing Technologies \cite{IBMc}.
+\subsection{Model checking in IBM}
+Having laboratory working on Verification allows IBM to create it own verification tools, and espacially a model checker : Rulebase\cite{IBMd}
+verification engineers
+Integration in the life cycle
+model checker Rule base
+When they use it
+purpose : make it easier to use
+\subsection{Using on the Gigahertz processor}
 \subsubsection{Properties that needs to be verify}
 \subsubsection{Interest of using model checking}
-\subsection{Model checking of IBM gigahertz processor}
-\subsubsection{Model checking in IBM}
-\subsubsection{Using on the Gigahertz processor}
-\section{Conclusion}
-We worked hard, and achieved very little.
+\paragraph{Problems about Gigahertz processor }
+\begin{itemize}
+\item{Time and memory : } From the definition of the Gigahertz processor, the modeling of the process requires a lot of states if you want to create the final states diagram. This diagram is used in the model checking, and more the diagram is complex, more time and memory are needed. in this case, the amount needed is very heavy.
+\item{Modeling} More the number of states needed, the modeling of the  Gigahertz processor is quiet hard to do, and requires some hard choices about abstractions.
+\end{itemize}
+\subsubsection{Verification of the IBM's Gigahertz processor}
+
+
+\addcontentsline{toc}{section}{Conclusion}
+\section*{Conclusion}
+\paragraph{}IBM uses his own tools for model checking, but the purpose is always the same : being able to provide products that respect precise specifications. Thanks to those tools, they achieve to solve some difficult verifications problems. The Gigahertz processor may not be verify without those tools. Model checking on IBM's Gigahertz processor helps engineers to define new properties and environments in a more efficient way. For IBM, model checking allows verification of specifications, but also hardware improvements. 
 
 \newpage
 \bibliographystyle{abbrv}
