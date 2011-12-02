@@ -1,0 +1,106 @@
+\documentclass[a4paper,11pt]{article} %indique la classe du document, et les options
+
+\pagenumbering{roman}
+%le pr\'eambule
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\setlength{\headheight}{15.2pt}
+\pagestyle{fancy}
+\selectlanguage{english}
+
+
+%Titre
+\makeatletter
+\def\maketitle{
+
+	\begin{multicols}{2}
+		{\begin{center}
+		{\LARGE \@title}\\
+		\rule{3cm}{1pt}
+	\end{center}}
+		\begin{flushright}
+			{\includegraphics[width=0.5\linewidth]{../../Newcastle-University.jpg}}\\
+			{\@date}\\
+		\end{flushright}
+	\end{multicols}	
+	\vspace{1cm}
+}
+\def\email#1{\def\@email{#1}}
+\makeatother
+\email{nicolas.desfeux@gmail.com}
+\date{\today}
+\author{Nicolas Desfeux}
+\title{
+{A model Checking Exercise : Pablo's restaurant
+}}
+
+\renewcommand{\thesection}{\textnormal{\alph{section}})} 
+\renewcommand{\thesubsection}{~~\textnormal{\roman{subsection}})} 
+%document principal 
+\lstset{ %
+language=Promela,                % the language of the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbersd
+numbersep=5pt,                  % how far the line-numbers are from the code
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,                   % adds a frame around the code
+tabsize=2,                      % sets default tabsize to 2 spaces
+captionpos=b,                   % sets the caption-position to bottom
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+}
+
+
+\begin{document}
+\maketitle
+\lhead{Nicolas Desfeux}
+\rhead{Student No :110477367}
+\section{Simple promela design}
+\subsection{Protocol implementation}
+Implementing this protocol requires some global variables. 
+We used a mtype to define the different meal available : 
+\begin{lstlisting}
+mtype = {starter,main,desert,drink}
+\end{lstlisting}
+ We decided to use two channels : 
+\begin{lstlisting}
+chan order_make = [20] of { mtype, int };
+chan service_channel = [20] of { mtype, int };
+\end{lstlisting}
+Both channels take value of type \{mtype, int\}, in order to couple a customer and his order. By this add, we have a way to link a meal with a customer. The first channel is use to send order from the customer to the chief. The second is use to send meal from the chief to the client.
+\paragraph{Chief proctype} The chief proctype is actually quiet simple. We created a loop that check the order\_make channel. As soon as something appears in this channel, the chief can start cooking. And as he cooks very fast, the meal is added to the service\_channel channel directly. We associate to this meal the id we received from the order\_make channel. The loop structure is done as the chief can only cook one meal at the time.
+\paragraph{Customer proctype} The customer proctype is a bit more complicate. The customer can go throw different states. The proctype we design consist on a series of switch which leads to different actions. As for the chief, the customer have a loop, as he can order several meal, or leave.
+The first switch we used check if the client already make an order.
+\begin{itemize}
+\item if the client already make an order: 
+\item if the client haven't order yet : 
+\end{itemize} 
+\paragraph{Runing the model}
+To run the model, we created an init proctype, who launch one chief proctyp, and as many customer proctyp as we need. You can change the number of customer created by changing the variable nb\_customer. There is no stop condition.
+\subsection{Check for deadlock, and model checking}
+We added a end label at the loop in the chief proctyp. That allow the chief not ending at the end of the execution. By this way, we avoid something seen as a mistake by Spin, but which is not in the real life (The chief only stop waiting at the close of the restaurant, that's include a time handling that we didn't implement here). At the end of the execution, each customers have to reach their end (we can't close the restaurant if some customers are still inside !).\\
+To check the model, we run some simulations using the Simulate / Replay function of ispin (with random and interactive progress).\\
+Runing verification confirm that the model we design have no dead lock. We run the safety verification, focusing on invalide endstates (deadlocks). You can the result of this verification in the appendix (figure \ref{verifA} page \pageref{verifA}).
+\newpage
+\section{Adding properties}
+\subsection{Maximum order and choices constraint}
+\subsection{Assertion}
+\newpage
+\section{Additional possibility}
+\subsection{Thinking state}
+\subsection{Checking for deadlock}
+
+\newpage
+\appendix
+\begin{figure}
+\caption{Verification on simple model implementation\label{verifA}}
+\end{figure}
+\lstinputlisting{Promela/Pablo-a.out}
+\end{document}
