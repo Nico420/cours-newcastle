@@ -3,29 +3,28 @@
 
 @MISC{IBM,
   author = {IBM},
-  howpublished = {http://www.ibm.com/fr/fr/},
+  title = {International Business Machines Corporation},
+  howpublished = {\url{www.ibm.com/uk/en/}},
+  note = {Access 28/11/2011.},
   crossref = {1},
   owner = {Nicolas},
   timestamp = {2011.11.29}
 }
 
-@ARTICLE{,
-  author = {J. Baumgartner - T. Heyman},
-  title = {AN OVERVIEW AND APPLICATION OF MODEL REDUCTION TECHNIQUES IN
-	
-	FORMAL VERIFICATION},
-  journal = {IBM},
-  year = {1998},
-  pages = {7},
+@MISC{,
+  author = {Google},
+  title = {Object-oriented Security},
+  howpublished = {\url{http://www.object-oriented-security.org/}},
+  note = {Access 02/12/2011.},
   owner = {Nicolas},
-  timestamp = {2011.12.01},
-  url = {http://dl.acm.org/citation.cfm?id=643514&CFID=55992512&CFTOKEN=83185337}
+  timestamp = {2011.12.02}
 }
 
 @MISC{IBMa,
   author = {IBM},
   title = {IBM research},
-  howpublished = {http://www.research.ibm.com/about/},
+  howpublished = {\url{http://www.research.ibm.com/about/}},
+  note = {Access 28/11/2011.},
   owner = {Nicolas},
   timestamp = {2011.12.01}
 }
@@ -33,7 +32,8 @@
 @MISC{IBMb,
   author = {IBM},
   title = {IBM POWER},
-  howpublished = {http://en.wikipedia.org/wiki/IBM\_POWER},
+  howpublished = {\url{http://en.wikipedia.org/wiki/IBM\_POWER}},
+  note = {Access 28/11/2011.},
   owner = {Nicolas},
   timestamp = {2011.12.02}
 }
@@ -41,7 +41,8 @@
 @MISC{IBMc,
   author = {IBM},
   title = {Formal Verification and Testing Technologies},
-  howpublished = {https://www.research.ibm.com/haifa/projects/verification/Formal\_Methods-Home/index.html},
+  howpublished = {\url{https://www.research.ibm.com/haifa/projects/verification/Formal\_Methods-Home/index.html}},
+  note = {Access 28/11/2011.},
   owner = {Nicolas},
   timestamp = {2011.12.02}
 }
@@ -49,25 +50,58 @@
 @MISC{IBMd,
   author = {IBM},
   title = {RuleBase},
-  howpublished = {https://www.research.ibm.com/haifa/projects/verification/RB_Homepage/},
+  howpublished = {\url{https://www.research.ibm.com/haifa/projects/verification/RB\_Homepage/}},
+  note = {Access 28/11/2011.},
   owner = {Nicolas},
   timestamp = {2011.12.02}
 }
 
-@ARTICLE{SHOHAMBEN-DAVID2003,
-  author = {SHOHAM BEN-DAVID, CINDY EISNER, DANIEL GEIST AND YARON WOLFSTHAL},
-  title = {Model Checking at IBM},
-  year = {2003},
+@MISC{IBMe,
+  author = {IBM},
+  title = {AS 400 series},
+  howpublished = {\url{http://www-03.ibm.com/systems/i/}},
+  note = {Access 28/11/2011.},
   owner = {Nicolas},
-  timestamp = {2011.12.01},
-  url = {http://www.cs.cmu.edu/afs/cs/Web/People/tamirh/cav99_l1l2.pdf}
+  timestamp = {2011.12.02}
+}
+
+@MISC{SHOHAMBEN-DAVID,
+  author = {Shoham BEN-DAVID, Cindy EISNER, Daniel GEIST and Yaron WOLFSTHAL},
+  title = {Model Checking at IBM},
+  howpublished = {\url{http://www.cs.uwaterloo.ca/~s3bendav/Special-issue.pdf}},
+  note = {Access 18/11/2011.},
+  owner = {Nicolas},
+  timestamp = {2011.12.02}
 }
 
 @MISC{Wikipaedia,
-  author = {Wikipaedia},
+  author = {Wikipedia},
   title = {IBM},
-  howpublished = {http://en.wikipedia.org/wiki/IBM},
+  howpublished = {\url{http://en.wikipedia.org/wiki/IBM}},
+  note = {Access 28/11/2011.},
   owner = {Nicolas},
   timestamp = {2011.11.29}
+}
+
+@MISC{Wikipedia,
+  author = {Wikipedia},
+  title = {IBM System i},
+  howpublished = {\url{en.wikipedia.org/wiki/IBM_System_i}},
+  note = {Access 20/11/2011.},
+  owner = {Nicolas},
+  timestamp = {2011.12.02}
+}
+
+@MISC{YaelAbarbanel-Vinov,
+  author = {Yael Abarbanel-Vinov, Neta Aizenbud-Reshef, Ilan Beer, Cindy Eisner,
+	
+	Daniel Geist, Tamir Heyman, Iris Reuveni, Eran Rippel,
+	
+	Irit Shitsevalov, YaronWolfsthal, Tali Yatzkar-Haham},
+  title = {On the effective deployment of functional formal verification},
+  howpublished = {\url{http://www.cs.rice.edu/~vardi/comp607/verification.pdf}},
+  note = {Access 22/11/2011.},
+  owner = {Nicolas},
+  timestamp = {2011.12.02}
 }
 
