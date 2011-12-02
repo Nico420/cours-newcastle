@@ -34,7 +34,7 @@ proctype customer(){
 
 	printf("\nI'm the customer %d\n\n",_pid);
 
-	label1:
+	main:
 		//launch a loop for the customer
 	do	
 		::wait_order -> goto pick_order;
@@ -49,13 +49,13 @@ proctype customer(){
 		:: id_in_queue==_pid -> 
 			printf("\nCustomer %d picked meal '%e' (associated id : %d)\n",_pid,plat,id_in_queue);
 			wait_order=false;
-			goto label1;
+			goto main;
 		::else -> service_channel!plat,id_in_queue;
 		fi;
 	od;
 	
 	makeOrder_or_leave:
-	printf("\nI will maybe make an order or leave\n");
+	printf("\nI will maybe make an order or leave (customer %d)\n",_pid);
 	do
 	:: order_make!starter,_pid;goto makeOrder;
 	:: order_make!main,_pid;goto makeOrder;
@@ -65,7 +65,7 @@ proctype customer(){
 	od;
 	makeOrder:
 	wait_order=true;
-	goto label1;
+	goto main;
 	
 
 	leave:
