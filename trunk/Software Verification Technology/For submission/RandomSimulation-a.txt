@@ -1,0 +1,36 @@
+Chief proctype launched. 
+  3:	proc  1 (chief) Pablo-a.pml:16 (state 1)	[printf('\\nChief proctype launched. \\n')]
+  5:	proc  0 (:init:) Pablo-a.pml:79 (state 7)	[((nb_customer>0))]
+Starting customer with pid 2
+  6:	proc  0 (:init:) creates proc  2 (customer)
+  6:	proc  0 (:init:) Pablo-a.pml:80 (state 3)	[(run customer())]
+  7:	proc  0 (:init:) Pablo-a.pml:80 (state 4)	[nb_customer = (nb_customer-1)]
+  9:	proc  0 (:init:) Pablo-a.pml:79 (state 7)	[((nb_customer>0))]
+Starting customer with pid 3
+ 10:	proc  0 (:init:) creates proc  3 (customer)
+ 10:	proc  0 (:init:) Pablo-a.pml:80 (state 3)	[(run customer())]
+ 11:	proc  0 (:init:) Pablo-a.pml:80 (state 4)	[nb_customer = (nb_customer-1)]
+I'm the customer 2
+ 12:	proc  2 (customer) Pablo-a.pml:35 (state 1)	[printf('\\nI'm the customer %d\\n\\n',_pid)]
+I'm the customer 3
+ 13:	proc  3 (customer) Pablo-a.pml:35 (state 1)	[printf('\\nI'm the customer %d\\n\\n',_pid)]
+ 16:	proc  2 (customer) Pablo-a.pml:39 (state 6)	[else]
+ 18:	proc  2 (customer) Pablo-a.pml:41 (state 5)	[goto makeOrder_or_leave]
+I will maybe make an order or leave (customer 2)
+ 19:	proc  2 (customer) Pablo-a.pml:58 (state 21)	[printf('\\nI will maybe make an order or leave (customer %d)\\n',_pid)]
+ 20:	proc  3 (customer) Pablo-a.pml:39 (state 6)	[else]
+ 22:	proc  3 (customer) Pablo-a.pml:41 (state 5)	[goto makeOrder_or_leave]
+ 23:	proc  2 (customer) Pablo-a.pml:59 (state 32)	[order_make!drink,_pid]
+ 24:	proc  2 (customer) Pablo-a.pml:63 (state 29)	[goto makeOrder]
+I will maybe make an order or leave (customer 3)
+ 25:	proc  3 (customer) Pablo-a.pml:58 (state 21)	[printf('\\nI will maybe make an order or leave (customer %d)\\n',_pid)]
+ 26:	proc  1 (chief) Pablo-a.pml:19 (state -)	[1?drink,2]
+ 26:	proc  1 (chief) Pablo-a.pml:18 (state 6)	[(order_make?[plat,id])]
+ 27:	proc  1 (chief) Pablo-a.pml:20 (state 3)	[order_make?plat,id]
+ 28:	proc  0 (:init:) Pablo-a.pml:79 (state 7)	[((nb_customer==0))]
+ 30:	proc  2 (customer) Pablo-a.pml:67 (state 35)	[wait_order = 1]
+ 31:	proc  2 (customer) Pablo-a.pml:68 (state 36)	[goto main]
+ 32:	proc  3 (customer) Pablo-a.pml:59 (state 32)	[order_make!main,_pid]
+ 34:	proc  3 (customer) Pablo-a.pml:61 (state 25)	[goto makeOrder]
+ 35:	proc  2 (customer) Pablo-a.pml:39 (state 6)	[(wait_order)]
+New meal in the queue : drink for customer[2].
