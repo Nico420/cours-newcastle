@@ -1,0 +1,17 @@
+Inductive tvl : Set := 
+true:tvl | false:tvl | maybe:tvl.
+
+Definition and3 (a b : tvl) : tvl :=
+match a with
+|true => b
+|false => false
+|maybe => b
+end. 
+
+Definition or3 (a b : tvl) : tvl :=
+match a with
+|true => true
+|false => b
+|maybe => b
+end. 
+
