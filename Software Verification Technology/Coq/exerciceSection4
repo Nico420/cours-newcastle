@@ -2,16 +2,66 @@ Inductive tvl : Set :=
 true:tvl | false:tvl | maybe:tvl.
 
 Definition and3 (a b : tvl) : tvl :=
-match a with
-|true => b
-|false => false
-|maybe => b
+match a,b with
+|true, _ => b
+|false, _ => false
+|maybe, false => false
+|maybe, _ => maybe
 end. 
 
 Definition or3 (a b : tvl) : tvl :=
-match a with
-|true => true
-|false => b
-|maybe => b
-end. 
+match a,b with
+|true,_ => true
+|false,_ => b
+|maybe,true => true
+|maybe,_=>maybe
+end.
 
+Definition not3 (a : tvl) : tvl :=
+match a with
+|true => false
+|false => true
+|maybe => maybe
+end. 
+ 
+Theorem and3Comm :
+forall a b, and3 a b = and3 b a.
+intros.
+induction a.
+induction b.
+trivial.
+trivial.
+trivial.
+induction b.
+trivial.
+trivial.
+trivial.
+induction b.
+trivial.
+trivial.
+trivial.
+Qed.
+
+Theorem or3Comm :
+forall a b, or3 a b = or3 b a.
+intros.
+induction a.
+induction b.
+trivial.
+trivial.
+trivial.
+induction b.
+trivial.
+trivial.
+trivial.
+induction b.
+trivial.
+trivial.
+trivial.
+Qed.
+
+Print bool.
+Definition bool2tvl (a:bool) : tvl :=
+match a with
+| True => true
+end.
