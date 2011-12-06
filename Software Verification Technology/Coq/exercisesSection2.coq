@@ -48,8 +48,9 @@ forall A B : Prop, ((A\/B) /\ ~A)->B.
 unfold "~".
 intros.
 destruct H.
-destruct H0.
 destruct H.
+destruct H0.
+trivial.
 trivial.
 Qed.
 
