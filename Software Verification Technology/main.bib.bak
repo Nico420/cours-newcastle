@@ -11,7 +11,7 @@
   timestamp = {2011.11.29}
 }
 
-@MISC{,
+@MISC{Google,
   author = {Google},
   title = {Object-oriented Security},
   howpublished = {\url{http://www.object-oriented-security.org/}},
