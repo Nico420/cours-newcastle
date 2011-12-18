@@ -1,0 +1,22 @@
+% This file was created with JabRef 2.6.
+% Encoding: Cp1252
+
+@MISC{Org,
+  author = {Tyneside dot Org},
+  title = {Tyneside dot Org},
+  howpublished = {http://www.tyneside.org.uk/travel/metroroute.htm},
+  note = {Visited on the 12. of December 2011},
+  __markedentry = {[Nicolas]},
+  owner = {Nicolas},
+  timestamp = {2011.12.17}
+}
+
+@MISC{Wikipedia,
+  author = {Wikipedia},
+  title = {Tyne and Wear Metro},
+  howpublished = {http://en.wikipedia.org/wiki/Tyne_and_Wear_Metro},
+  note = {Visited on the 17 November 2011.},
+  owner = {Nicolas},
+  timestamp = {2011.12.17}
+}
+
