@@ -1,0 +1,37 @@
+digraph coursework2{
+	graph [bgcolor=lightyellow2, splines=true];
+	edge [color=black, arrowsize=2];
+	node [color=cyan, style=filled, shape=polygon, sides=6, fontname="Verdana"];
+	
+	CS->T1[label="receive(m)", color=green, fontcolor=green];
+	CS->T2[label="receive(m)", color=green, fontcolor=green];
+	CS->T3[label="receive(m)", color=green, fontcolor=green];
+	
+	T1->CS[label=""];
+	T2->CS[label=""];
+	T3->CS[label=""];
+	
+	T1->P1[label="deliver(m)",color=cyan,fontcolor=cyan];
+	P1->T1[label="send(m)"];
+
+	T2->P2[label="deliver(m)",color=cyan,fontcolor=cyan];
+	P2->T2[label="send(m)"];
+	
+	T3->P3[label="deliver(m)",color=cyan,fontcolor=cyan];
+	P3->T3[label="send(m)"];
+	
+	
+	
+	T1 [label="TOS 0"];
+	T2 [label="TOS i"];
+	T3 [label="TOS n"];
+	CS [label="Communication System", shape=rectangle, color=green, fontcolor=black];
+	P1 [label="P1", shape=rectangle, color=red, fontcolor=black];
+	P2 [label="P2", shape=rectangle, color=red, fontcolor=black];
+	P3 [label="P3", shape=rectangle, color=red, fontcolor=black];
+
+	
+	{ rank=same; P1 P2 P3}
+	{ rank=same; T1 T2 T3}
+
+}
