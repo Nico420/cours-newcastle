@@ -32,9 +32,9 @@ proctype customer(){
 	//Indicate if the customer already placed an order.
 	bool wait_order = false;
 
-	printf("\nI'm the customer %d\n\n",_pid);
+	printf("\nI am the customer %d\n\n",_pid);
 
-	main:
+	loopMain:
 		//launch a loop for the customer
 	do	
 		::wait_order -> goto pick_order;
@@ -49,7 +49,7 @@ proctype customer(){
 		:: id_in_queue==_pid -> 
 			printf("\nCustomer %d picked meal '%e' (associated id : %d)\n",_pid,plat,id_in_queue);
 			wait_order=false;
-			goto main;
+			goto loopMain;
 		::else -> service_channel!plat,id_in_queue;
 		fi;
 	od;
@@ -65,7 +65,7 @@ proctype customer(){
 	od;
 	makeOrder:
 	wait_order=true;
-	goto main;
+	goto loopMain;
 	
 
 	leave:
